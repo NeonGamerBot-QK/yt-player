@@ -37,6 +37,7 @@ export default function Home() {
     audioElem.current.addEventListener('loadeddata', () => {
       let duration = audioElem.current.duration;
       // The duration variable now holds the duration (in seconds) of the audio clip
+    audioElem.current.currentTime = 0;
     console.log("loaded data, duration: " + duration)
     // audioElem.current.currentTime = 0;
   })
@@ -46,7 +47,7 @@ export default function Home() {
     else {
       audioElem.current.pause();
     }
-  }, [isplaying])
+  }, [currentSong, isplaying, songs])
 const onLoadPlaylist = async () => {
   const playlist_d = await fetch("/api/search?url="+url).then(r=>r.json())
   console.log(playlist_d)
@@ -103,7 +104,7 @@ document.title = currentSong.title;
     }}> run the example </button>
      <p className="note">
         This has NO ADS, loads up to 100 songs from a playlist. {" "}
-        Only downside is that you have to hear song and cannot buffer through the song but you can still skip and go back to songs {" "}
+      <strike>  Only downside is that you have to hear song and cannot buffer through the song but you can still skip and go back to songs </strike> Fixed! {" "}
         works with YT PLAYLISTS ONLY
       </p>
       <p className="warning">

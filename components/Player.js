@@ -1,3 +1,4 @@
+import Image from "next/image"
 import React, { useRef } from "react";
 import {
   BsFillPlayCircleFill,
@@ -72,7 +73,7 @@ return `${seconds == 0 ? mins+1 : mins}:${seconds.toString().length == 1 ? "0"+s
 }
   return (
     <div className="player_container">
-      { currentSong ? <img src={currentSong.thumbnail} /> : null}
+      { currentSong ? <Image alt="Cover of song" src={currentSong.thumbnail} /> : null}
       <div className="title">
         <p>{currentSong.title} - {audioElem.current ? formatTime(audioElem.current.currentTime) : null}/{audioElem.current ? formatTime(audioElem.current.duration) : null}</p>
       </div>
