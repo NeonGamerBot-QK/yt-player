@@ -1,26 +1,41 @@
-html,
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&display=swap');
+
 body {
-  padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #b8c6db;
+  background-image: linear-gradient(315deg, #0266fd 0%, #021024 74%);
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Montserrat', sans-serif;
 }
 
-* {
-  box-sizing: border-box;
+.warning {
+  padding-left: 10px;
+  border-left: 5px solid tomato;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+.note {
+  padding-left: 10px;
+  border-left: 5px solid rgb(255, 175, 55);
+}
+
+.link {
+  color: rgb(103, 92, 253);
+}
+
+pre {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+}
+
+code {
+  background-color: rgb(212, 212, 212);
+  padding: 5px;
 }
