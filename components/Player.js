@@ -66,6 +66,9 @@ if(audioElem.current) {
     skiptoNext();
   }
 }
+const myLoader = ({ src, width, quality }) => {
+  return src;
+}
 function formatTime(sec) {
   const mins = (sec / 60).toString().split(".")[0]
 const seconds = (sec.toFixed(0) % 60)
@@ -73,7 +76,7 @@ return `${seconds == 0 ? mins+1 : mins}:${seconds.toString().length == 1 ? "0"+s
 }
   return (
     <div className="player_container">
-      { currentSong ? <Image alt="Cover of song" src={currentSong.thumbnail} /> : null}
+      { currentSong ? <Image alt="Cover of song" loader={myLoader} src={currentSong.thumbnail} /> : null}
       <div className="title">
         <p>{currentSong.title} - {audioElem.current ? formatTime(audioElem.current.currentTime) : null}/{audioElem.current ? formatTime(audioElem.current.duration) : null}</p>
       </div>
