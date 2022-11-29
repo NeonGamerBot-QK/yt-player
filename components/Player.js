@@ -1,13 +1,18 @@
 import Image from "next/image"
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   BsFillPlayCircleFill,
   BsFillPauseCircleFill,
   BsFillSkipStartCircleFill,
   BsSkipEndCircleFill,
   BsFillSkipEndCircleFill,
+  BsShuffle,
 } from "react-icons/bs";
-
+import {
+  TbRepeat,
+  TbRepeatOnce,
+  TbRepeatOff
+} from "react-icons/tb"
 const Player = ({
   audioElem,
   isplaying,
@@ -15,9 +20,14 @@ const Player = ({
   currentSong,
   setCurrentSong,
   songs,
+  isrepeating,
+  setRepeat,
+  shuffle,
+  setShuffle
 }) => {
   const clickRef = useRef();
-
+  const shuffleRef = useRef();
+const [shuffledSongs, setShuffledSongs] = useState([])
   const PlayPause = () => {
     setisplaying(!isplaying);
   };
@@ -33,11 +43,16 @@ const Player = ({
   const skipBack = () => {
     const index = songs.findIndex((x) => x.title == currentSong.title);
 setisplaying(false)
-
     if (index == 0) {
-      setCurrentSong(songs[songs.length - 1]);
+      if(shuffle) {
+      setCurrentSong(shuffledSongs[shuffledSongs.length - 1]);
+      } else 
+        setCurrentSong(songs[songs.length - 1]);
     } else {
-      setCurrentSong(songs[index - 1]);
+      if(shuffle) {
+        setCurrentSong(shuffledSongs[index - 1]);
+        } else
+          setCurrentSong(songs[index - 1]);
     }
     audioElem.current.currentTime = 0;
     setTimeout(() => {
@@ -46,10 +61,14 @@ setisplaying(false)
     }, 50)
   };
 
-  const skiptoNext = () => {
-    const index = songs.findIndex((x) => x.title == currentSong.title);
+  const skiptoNext = (loop) => {
+    const index = shuffle ? Math.round(Math.random() * songs.length)-1 : songs.findIndex((x) => x.title == currentSong.title);
 setisplaying(false)
-    if (index == songs.length - 1) {
+setShuffledSongs((e) => [
+  ...e,
+  currentSong
+])
+    if (index == songs.length - 1 && !shuffle) {
       setCurrentSong(songs[0]);
     } else {
       setCurrentSong(songs[index + 1]);
@@ -57,7 +76,6 @@ setisplaying(false)
     audioElem.current.currentTime = 0;
 setTimeout(() => {
   setisplaying(true)
-
 }, 50)
   };
 if(audioElem.current) {
@@ -74,9 +92,14 @@ function formatTime(sec) {
 const seconds = (sec.toFixed(0) % 60)
 return `${seconds == 0 ? mins+1 : mins}:${seconds.toString().length == 1 ? "0"+seconds.toString() : seconds}`
 }
+const repeatClick = () => {
+  console.log(isrepeating, "VALUE")
+  if(isrepeating >= 2) return setRepeat(0) 
+  setRepeat(isrepeating+1)
+}
   return (
     <div className="player_container">
-      { currentSong ? <Image alt="Cover of song" loader={myLoader} src={currentSong.thumbnail} /> : null}
+      { currentSong && currentSong.thumbnail ? <Image alt="Cover of song" loader={myLoader} src={currentSong.thumbnail} width={200} height={200}/> : null}
       <div className="title">
         <p>{currentSong.title} - {audioElem.current ? formatTime(audioElem.current.currentTime) : null}/{audioElem.current ? formatTime(audioElem.current.duration) : null}</p>
       </div>
@@ -89,6 +112,12 @@ return `${seconds == 0 ? mins+1 : mins}:${seconds.toString().length == 1 ? "0"+s
         </div>
       </div>
       <div className="controls">
+    <BsShuffle className="btn_action" onClick={() => {
+      setShuffle(true)
+    }}/>
+{/*   <img src="/shuffle.png" className="btn_action" width={64 * 2} height={64 * 2}ref={shuffleRef} onClick={() => {
+          shuffleRef.current.src = "/shuffle.gif";
+        }}/> */}
         <BsFillSkipStartCircleFill className="btn_action" onClick={skipBack} />
         {isplaying ? (
           <BsFillPauseCircleFill
@@ -99,6 +128,7 @@ return `${seconds == 0 ? mins+1 : mins}:${seconds.toString().length == 1 ? "0"+s
           <BsFillPlayCircleFill className="btn_action pp" onClick={PlayPause} />
         )}
         <BsFillSkipEndCircleFill className="btn_action" onClick={skiptoNext} />
+       { isrepeating === 0 ? <TbRepeat className="btn_action" onClick={repeatClick} /> : isrepeating === 1 ? <TbRepeatOnce className="btn_action" onClick={repeatClick} />: isrepeating === 2 ? <TbRepeatOff   className="btn_action" onClick={repeatClick}/> : isrepeating} 
       </div>
     </div>
   );

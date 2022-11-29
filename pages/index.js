@@ -11,6 +11,8 @@ export default function Home() {
   const [songs, setSongs] = useState([]);
   const [info, setInfo] = useState({});
   const [isplaying, setisplaying] = useState(false);
+  const [isshuffleon, setShuffle] = useState(false);
+  const [isrepeating, setisrp] = useState(0);
   const [url, updateUrl] = useState("");
   const [currentSong, setCurrentSong] = useState(songs[0]);
 
@@ -86,9 +88,9 @@ document.title = currentSong.title;
       <Wrapper>
       <Header data={info}/>
       {songs.length !== 0 ?    <div className="App">
-      <audio src={currentSong ?  currentSong.url : songs[0].url} ref={audioElem} onTimeUpdate={onPlaying} />
+      <audio src={currentSong ?  currentSong.url : songs[0].url} ref={audioElem} onTimeUpdate={onPlaying} loop={isrepeating === 1}/>
      
-      <Player songs={songs} setSongs={setSongs} isplaying={isplaying} setisplaying={setisplaying} audioElem={audioElem} currentSong={currentSong} setCurrentSong={setCurrentSong} />
+      <Player songs={songs} setSongs={setSongs} isplaying={isplaying} setisplaying={setisplaying} audioElem={audioElem} currentSong={currentSong} setCurrentSong={setCurrentSong} isrepeating={isrepeating} setRepeat={setisrp} />
     </div>:  <Wrapper>
 <h1>Playlist url</h1>
       <input name="playlist_url" type="url" value={url} onChange={(e) => updateUrl(e.target.value)} />
