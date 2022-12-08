@@ -17,58 +17,43 @@ export default function Home() {
   const [url, updateUrl] = useState("");
   const [currentSong, setCurrentSong] = useState(songs[songIndex]);
   const audioElem = useRef();
-  useEffect(() => {
-  
-    const url = process.browser ? new URLSearchParams( window.location) : null;
-    console.debug("URL STATE", url)
-    if(url) {
-      const playlist_url = url.get("p");
-      const song_index = url.get("s");
-      const autoload = url.get("a");
-      console.debug("QUERY LOADED", url.values(), playlist_url, songIndex, autoload)
-    if(songs.length === 0) {
-    updateUrl(playlist_url);
-    setSongIndex(songIndex)
-    if(autoload) onLoadPlaylist();
+
+  const updateSongIndex = (index) => {
+    if (window.location) {
+      const url = process.browser ? new URLSearchParams(window.location) : null;
+      if (url) {
+        url.set("s", index);
+        setSongIndex(index);
+      }
     }
-    }
-    }, [songs.length, songIndex, onLoadPlaylist])
-const updateSongIndex = (index) => {
-  if(window.location) {
-    const url = process.browser ? new URLSearchParams( window.location) : null;
-if(url) {
-  url.set("s", index);
-  setSongIndex(index);
-}
   }
-}
   useEffect(() => {
-    if(songs[0] && !currentSong) {
-      
+    if (songs[0] && !currentSong) {
+
       setCurrentSong(songs[songIndex])
     }
-    if(!audioElem.current) return;
+    if (!audioElem.current) return;
     audioElem.current.addEventListener('loadstart', () => {
       let duration = audioElem.current.duration;
       // The duration variable now holds the duration (in seconds) of the audio clip
-    console.log("loaded start , duration: " + duration)
+      console.log("loaded start , duration: " + duration)
 
-  })
-  
+    })
+
     audioElem.current.addEventListener('loadedmetadata', () => {
       let duration = audioElem.current.duration;
       // The duration variable now holds the duration (in seconds) of the audio clip
-    audioElem.current.currentTime = duration-5;
+      audioElem.current.currentTime = duration - 5;
 
-    console.log("loaded metadata, duration: " + duration)
+      console.log("loaded metadata, duration: " + duration)
     })
     audioElem.current.addEventListener('loadeddata', () => {
       let duration = audioElem.current.duration;
       // The duration variable now holds the duration (in seconds) of the audio clip
-    audioElem.current.currentTime = 0;
-    console.log("loaded data, duration: " + duration)
-    // audioElem.current.currentTime = 0;
-  })
+      audioElem.current.currentTime = 0;
+      console.log("loaded data, duration: " + duration)
+      // audioElem.current.currentTime = 0;
+    })
     if (isplaying) {
       audioElem.current.play();
     }
@@ -76,33 +61,48 @@ if(url) {
       audioElem.current.pause();
     }
   }, [currentSong, isplaying, songs, songIndex])
-const onLoadPlaylist = async () => {
-  const playlist_d = await fetch("/api/search?url="+url).then(r=>r.json())
-  console.log(playlist_d)
-  setInfo(playlist_d)
-  setSongs(playlist_d.videos.map((v) => {
-    return {
-      url: "/api/download?url=https://www.youtube.com/watch?v="+v.videoId,
-      title: v.title,
-      ...v
-    }
-  }))
-  setCurrentSong({
-    title: playlist_d.videos[0].title,
-    url: "/api/download?url=https://www.youtube.com/watch?v="+playlist_d.videos[0].videoId,
-    ...playlist_d.videos[0]
-  });
+  const onLoadPlaylist = async () => {
+    const playlist_d = await fetch("/api/search?url=" + url).then(r => r.json())
+    console.log(playlist_d)
+    setInfo(playlist_d)
+    setSongs(playlist_d.videos.map((v) => {
+      return {
+        url: "/api/download?url=https://www.youtube.com/watch?v=" + v.videoId,
+        title: v.title,
+        ...v
+      }
+    }))
+    setCurrentSong({
+      title: playlist_d.videos[0].title,
+      url: "/api/download?url=https://www.youtube.com/watch?v=" + playlist_d.videos[0].videoId,
+      ...playlist_d.videos[0]
+    });
 
-}
+  }
   const onPlaying = () => {
     const duration = audioElem.current.duration;
     const ct = audioElem.current.currentTime;
-document.title = currentSong.title;
+    document.title = currentSong.title;
     setCurrentSong({ ...currentSong, "progress": ct / duration * 100, "length": duration })
 
   }
+  useEffect(() => {
 
-//if(url !== "" && songs.length === 0) onLoadPlaylist();
+    const url = process.browser ? new URLSearchParams(window.location) : null;
+    console.debug("URL STATE", url)
+    if (url) {
+      const playlist_url = url.get("p");
+      const song_index = url.get("s");
+      const autoload = url.get("a");
+      console.debug("QUERY LOADED", url.values(), playlist_url, songIndex, autoload)
+      if (songs.length === 0) {
+        updateUrl(playlist_url);
+        setSongIndex(songIndex)
+        if (autoload) onLoadPlaylist();
+      }
+    }
+  }, [songs.length, songIndex, onLoadPlaylist])
+  //if(url !== "" && songs.length === 0) onLoadPlaylist();
   // useEffect(())
   return (
     <div className={styles.container}>
@@ -112,33 +112,33 @@ document.title = currentSong.title;
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Wrapper>
-      <Header data={info}/>
-      {songs.length !== 0 ?    <div className="App">
-      <audio src={currentSong ?  currentSong.url : songs[0].url} ref={audioElem} onTimeUpdate={onPlaying} loop={isrepeating === 1}/>
-     
-      <Player updateIndex={updateSongIndex} songs={songs} setSongs={setSongs} isplaying={isplaying} setisplaying={setisplaying} audioElem={audioElem} currentSong={currentSong} setCurrentSong={setCurrentSong} isrepeating={isrepeating} setRepeat={setisrp} />
-    </div>:  <Wrapper>
-<h1>Playlist url</h1>
-      <input name="playlist_url" type="url" value={url} onChange={(e) => updateUrl(e.target.value)} />
-      <button onClick={onLoadPlaylist}>Load</button>
-      </Wrapper>}
-      <button onClick={() => {
-      const d = [{
-        "title": "Drake - Forever",
-        "url": "/api/download?url=https://www.youtube.com/watch?v=Uq9gPaIzbe8" 
-      }]
-      setSongs(d)
-      setCurrentSong(d[0]);
-    }}> run the example </button>
-     <p className="note">
-        This has NO ADS, loads up to 100 songs from a playlist. {" "}
-      <strike>  Only downside is that you have to hear song and cannot buffer through the song but you can still skip and go back to songs </strike> Fixed! {" "}
-        works with YT PLAYLISTS ONLY
-      </p>
-      <p className="warning">
-        This is still in development so there may be some errors but enjoy
-      </p>
-      {/* <p className="note">
+        <Header data={info} />
+        {songs.length !== 0 ? <div className="App">
+          <audio src={currentSong ? currentSong.url : songs[0].url} ref={audioElem} onTimeUpdate={onPlaying} loop={isrepeating === 1} />
+
+          <Player updateIndex={updateSongIndex} songs={songs} setSongs={setSongs} isplaying={isplaying} setisplaying={setisplaying} audioElem={audioElem} currentSong={currentSong} setCurrentSong={setCurrentSong} isrepeating={isrepeating} setRepeat={setisrp} />
+        </div> : <Wrapper>
+          <h1>Playlist url</h1>
+          <input name="playlist_url" type="url" value={url} onChange={(e) => updateUrl(e.target.value)} />
+          <button onClick={onLoadPlaylist}>Load</button>
+        </Wrapper>}
+        <button onClick={() => {
+          const d = [{
+            "title": "Drake - Forever",
+            "url": "/api/download?url=https://www.youtube.com/watch?v=Uq9gPaIzbe8"
+          }]
+          setSongs(d)
+          setCurrentSong(d[0]);
+        }}> run the example </button>
+        <p className="note">
+          This has NO ADS, loads up to 100 songs from a playlist. {" "}
+          <strike>  Only downside is that you have to hear song and cannot buffer through the song but you can still skip and go back to songs </strike> Fixed! {" "}
+          works with YT PLAYLISTS ONLY
+        </p>
+        <p className="warning">
+          This is still in development so there may be some errors but enjoy
+        </p>
+        {/* <p className="note">
         If you are using NPM v7 or above, you need to add{" "}
         <code>--legacy-peer-deps</code> at the end of the command above.
       </p>
@@ -182,8 +182,8 @@ document.title = currentSong.title;
         <a href="https://www.datocms.com">DatoCMS</a> to manage your audio files
         and access them via API.
       </p> */}
-      <Footer />
-    </Wrapper>
+        <Footer />
+      </Wrapper>
     </div>
   )
 }
