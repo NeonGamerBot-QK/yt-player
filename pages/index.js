@@ -10,12 +10,12 @@ import { useEffect, useRef, useState } from "react";
 export default function Home() {
   const [songs, setSongs] = useState([]);
   const [info, setInfo] = useState({});
-  const [isplaying, setisplaying] = useState(false);
   const [isshuffleon, setShuffle] = useState(false);
   const [isrepeating, setisrp] = useState(0);
   const [songIndex, setSongIndex] = useState(0);
   const [url, updateUrl] = useState("");
   const [currentSong, setCurrentSong] = useState(songs[songIndex]);
+  const [isplaying, setisplaying] = useState(songIndex > 0 ? true :false);
   const audioElem = useRef();
 
   const updateSongIndex = (index) => {
