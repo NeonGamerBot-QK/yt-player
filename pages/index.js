@@ -23,6 +23,7 @@ export default function Home() {
       const url = process.browser ? new URLSearchParams(window.location.search) : null;
       if (url) {
         url.set("s", index);
+        window.search = url.toString()
         setSongIndex(index);
       }
     }
@@ -89,13 +90,13 @@ export default function Home() {
   useEffect(() => {
 
     const url = process.browser ? new URLSearchParams(window.location.search) : null;
-    console.debug("URL STATE", url)
+    //console.debug("URL STATE", url)
     if (url) {
       const playlist_url = url.get("p");
       const song_index = url.get("s");
       const autoload = url.get("a");
-      console.debug("QUERY LOADED", url.values(), playlist_url, song_index, autoload, window.location)
       if (songs.length === 0) {
+      console.debug("QUERY LOADED", url.values(), playlist_url, song_index, autoload, window.location)
         updateUrl(playlist_url);
         setSongIndex(songIndex)
         if (autoload) onLoadPlaylist();
