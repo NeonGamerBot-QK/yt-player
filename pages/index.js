@@ -94,7 +94,7 @@ export default function Home() {
       const playlist_url = url.get("p");
       const song_index = url.get("s");
       const autoload = url.get("a");
-      console.debug("QUERY LOADED", url.values(), playlist_url, songIndex, autoload)
+      console.debug("QUERY LOADED", url.values(), playlist_url, song_index, autoload, window.location)
       if (songs.length === 0) {
         updateUrl(playlist_url);
         setSongIndex(songIndex)
