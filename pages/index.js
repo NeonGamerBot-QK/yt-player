@@ -97,7 +97,7 @@ export default function Home() {
       if (songs.length === 0) {
       console.debug("QUERY LOADED", url.values(), playlist_url, song_index, autoload, window.location)
         updateUrl(playlist_url);
-        setSongIndex(songIndex)
+        setSongIndex(song_index)
         console.debug("SET VALUES", songIndex, url)
         if (autoload) onLoadPlaylist();
       }
