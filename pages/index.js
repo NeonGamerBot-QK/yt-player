@@ -23,8 +23,8 @@ export default function Home() {
       const url = process.browser ? new URLSearchParams(window.location.search) : null;
       if (url) {
         url.set("s", index);
-        window.location.search = url.toString()
         setSongIndex(index);
+        window.location.search = url.toString()
       }
     }
   }
@@ -74,9 +74,9 @@ export default function Home() {
       }
     }))
     setCurrentSong({
-      title: playlist_d.videos[0].title,
-      url: "/api/download?url=https://www.youtube.com/watch?v=" + playlist_d.videos[0].videoId,
-      ...playlist_d.videos[0]
+      title: playlist_d.videos[songIndex].title,
+      url: "/api/download?url=https://www.youtube.com/watch?v=" + playlist_d.videos[songIndex].videoId,
+      ...playlist_d.videos[songIndex]
     });
 
   }
@@ -98,7 +98,7 @@ export default function Home() {
       if (songs.length === 0) {
       console.debug("QUERY LOADED", url.values(), playlist_url, song_index, autoload, window.location)
         updateUrl(playlist_url);
-        setSongIndex(songIndex)
+        setSongIndex(parseInt(songIndex || 0))
         if (autoload) onLoadPlaylist();
       }
     }
