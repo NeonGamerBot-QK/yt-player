@@ -115,7 +115,7 @@ export default function Home() {
       <Wrapper>
         <Header data={info} />
         {songs.length !== 0 ? <div className="App">
-          <audio src={currentSong ? currentSong.url : songs[0].url} ref={audioElem} onTimeUpdate={onPlaying} loop={isrepeating === 1} />
+          <audio src={currentSong ? currentSong.url : songs[songIndex].url} ref={audioElem} onTimeUpdate={onPlaying} loop={isrepeating === 1} />
 
           <Player updateIndex={updateSongIndex} songs={songs} setSongs={setSongs} isplaying={isplaying} setisplaying={setisplaying} audioElem={audioElem} currentSong={currentSong} setCurrentSong={setCurrentSong} isrepeating={isrepeating} setRepeat={setisrp} />
         </div> : <Wrapper>
@@ -129,7 +129,7 @@ export default function Home() {
             "url": "/api/download?url=https://www.youtube.com/watch?v=Uq9gPaIzbe8"
           }]
           setSongs(d)
-          setCurrentSong(d[0]);
+          setCurrentSong(d[songIndex]);
         }}> run the example </button>
         <p className="note">
           This has NO ADS, loads up to 100 songs from a playlist. {" "}
