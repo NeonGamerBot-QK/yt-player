@@ -23,7 +23,7 @@ export default function Home() {
       const url = process.browser ? new URLSearchParams(window.location.search) : null;
       if (url) {
         url.set("s", index);
-        window.search = url.toString()
+        window.location.search = url.toString()
         setSongIndex(index);
       }
     }
