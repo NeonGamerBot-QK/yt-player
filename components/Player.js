@@ -81,8 +81,8 @@ setShuffledSongs((e) => [
       setCurrentSong(songs[0]);
     } else {
       const pointer = index + 1;
-      updateIndex(pointer)
       setCurrentSong(songs[pointer]);
+      updateIndex(pointer)
     }
     audioElem.current.currentTime = 0;
 setTimeout(() => {
