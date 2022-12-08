@@ -8,22 +8,6 @@ import Footer from "../components/Footer";
 import { useEffect, useRef, useState } from "react";
 // import Player from "@madzadev/audio-player";
 export default function Home() {
-useEffect(() => {
-  
-const url = process.browser ? new URLSearchParams( window.location) : null;
-console.debug("URL STATE", url)
-if(url) {
-  const playlist_url = url.get("p");
-  const song_index = url.get("s");
-  const autoload = url.get("a");
-  console.debug("QUERY LOADED", url.values(), playlist_url, songIndex, autoload)
-if(songs.length === 0) {
-updateUrl(playlist_url);
-setSongIndex(songIndex)
-if(autoload) onLoadPlaylist();
-}
-}
-}, [songs.length, songIndex, onLoadPlaylist])
   const [songs, setSongs] = useState([]);
   const [info, setInfo] = useState({});
   const [isplaying, setisplaying] = useState(false);
@@ -33,6 +17,22 @@ if(autoload) onLoadPlaylist();
   const [url, updateUrl] = useState("");
   const [currentSong, setCurrentSong] = useState(songs[songIndex]);
   const audioElem = useRef();
+  useEffect(() => {
+  
+    const url = process.browser ? new URLSearchParams( window.location) : null;
+    console.debug("URL STATE", url)
+    if(url) {
+      const playlist_url = url.get("p");
+      const song_index = url.get("s");
+      const autoload = url.get("a");
+      console.debug("QUERY LOADED", url.values(), playlist_url, songIndex, autoload)
+    if(songs.length === 0) {
+    updateUrl(playlist_url);
+    setSongIndex(songIndex)
+    if(autoload) onLoadPlaylist();
+    }
+    }
+    }, [songs.length, songIndex, onLoadPlaylist])
 const updateSongIndex = (index) => {
   if(window.location) {
     const url = process.browser ? new URLSearchParams( window.location) : null;
