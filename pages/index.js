@@ -105,6 +105,7 @@ export default function Home() {
   }, [songs.length, songIndex, onLoadPlaylist])
   //if(url !== "" && songs.length === 0) onLoadPlaylist();
   // useEffect(())
+  if(audioElem.current) audioElem.current.muted = false;
   return (
     <div className={styles.container}>
       <Head>
@@ -115,7 +116,7 @@ export default function Home() {
       <Wrapper>
         <Header data={info} />
         {songs.length !== 0 ? <div className="App">
-          <audio src={currentSong ? currentSong.url : songs[songIndex].url} ref={audioElem} onTimeUpdate={onPlaying} loop={isrepeating === 1} />
+          <audio src={currentSong ? currentSong.url : songs[songIndex].url} autoplay muted ref={audioElem} onTimeUpdate={onPlaying} loop={isrepeating === 1} />
 
           <Player updateIndex={updateSongIndex} songs={songs} setSongs={setSongs} isplaying={isplaying} setisplaying={setisplaying} audioElem={audioElem} currentSong={currentSong} setCurrentSong={setCurrentSong} isrepeating={isrepeating} setRepeat={setisrp} />
         </div> : <Wrapper>
