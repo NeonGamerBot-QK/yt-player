@@ -8,14 +8,14 @@ import Footer from "../components/Footer";
 import { useEffect, useRef, useState } from "react";
 // import Player from "@madzadev/audio-player";
 export default function Home() {
+const burl = process.browser ? new URL(window.location.href) : null;
   const [songs, setSongs] = useState([]);
   const [info, setInfo] = useState({});
   const [isplaying, setisplaying] = useState(false);
   const [isshuffleon, setShuffle] = useState(false);
   const [isrepeating, setisrp] = useState(0);
-  const [url, updateUrl] = useState("");
+  const [url, updateUrl] = useState(burl.searchParams.get("p") || "");
   const [currentSong, setCurrentSong] = useState(songs[0]);
-
   const audioElem = useRef();
 
   useEffect(() => {
@@ -76,7 +76,7 @@ document.title = currentSong.title;
 
   }
 
-
+if(url !== "" && songs.length === 0) onLoadPlaylist();
   // useEffect(())
   return (
     <div className={styles.container}>
