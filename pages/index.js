@@ -104,6 +104,11 @@ export default function Home() {
       }
     }
   }, [songs.length, songIndex, onLoadPlaylist])
+  useEffect(() => {
+    window.addEventListener('touchstart', () => {
+      if(audioElem.current) audioElem.current.play()
+    })
+  })
   //if(url !== "" && songs.length === 0) onLoadPlaylist();
   // useEffect(())
   if(audioElem.current) audioElem.current.muted = false;
