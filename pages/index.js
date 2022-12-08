@@ -9,8 +9,11 @@ import { useEffect, useRef, useState } from "react";
 // import Player from "@madzadev/audio-player";
 export default function Home() {
 useEffect(() => {
+  
 const url = process.browser ? new URLSearchParams( window.location) : null;
+console.debug("URL STATE", url)
 if(url) {
+  console.debug("QUERY LOADED", url.values())
   const playlist_url = url.get("p");
   const song_index = url.get("s");
   const autoload = url.get("a");
