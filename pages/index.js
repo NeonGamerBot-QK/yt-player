@@ -30,7 +30,6 @@ export default function Home() {
   }
   useEffect(() => {
     if (songs[0] && !currentSong) {
-
       setCurrentSong(songs[songIndex])
     }
     if (!audioElem.current) return;
@@ -98,7 +97,7 @@ export default function Home() {
       if (songs.length === 0) {
       console.debug("QUERY LOADED", url.values(), playlist_url, song_index, autoload, window.location)
         updateUrl(playlist_url);
-        setSongIndex(parseInt(songIndex || 0))
+        setSongIndex(songIndex)
         if (autoload) onLoadPlaylist();
       }
     }
