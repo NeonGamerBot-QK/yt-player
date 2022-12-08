@@ -91,12 +91,12 @@ export default function Home() {
     const url = process.browser ? new URLSearchParams(window.location.search) : null;
     //console.debug("URL STATE", url)
     if (url) {
-      const playlist_url = url.get("p");
+      const playlist_id = url.get("p");
       const song_index = url.get("s");
       const autoload = url.get("a");
       if (songs.length === 0) {
-      console.debug("QUERY LOADED", url.values(), playlist_url, song_index, autoload, window.location)
-        updateUrl(playlist_url);
+      console.debug("QUERY LOADED", url.values(), playlist_id, song_index, autoload, window.location)
+        updateUrl("https://www.youtube.com/playlist?list="+playlist_id);
         setSongIndex(song_index)
         setisplaying(songIndex > 0 ? true :false)
         console.debug("SET VALUES", songIndex, url)
