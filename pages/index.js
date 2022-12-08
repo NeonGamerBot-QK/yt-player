@@ -20,7 +20,7 @@ export default function Home() {
 
   const updateSongIndex = (index) => {
     if (window.location) {
-      const url = process.browser ? new URLSearchParams(window.location) : null;
+      const url = process.browser ? new URLSearchParams(window.location.search) : null;
       if (url) {
         url.set("s", index);
         setSongIndex(index);
