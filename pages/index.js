@@ -88,7 +88,7 @@ export default function Home() {
   }
   useEffect(() => {
 
-    const url = process.browser ? new URLSearchParams(window.location) : null;
+    const url = process.browser ? new URLSearchParams(window.location.search) : null;
     console.debug("URL STATE", url)
     if (url) {
       const playlist_url = url.get("p");
