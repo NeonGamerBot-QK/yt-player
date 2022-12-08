@@ -23,7 +23,8 @@ const Player = ({
   isrepeating,
   setRepeat,
   shuffle,
-  setShuffle
+  setShuffle,
+  updateIndex
 }) => {
   const clickRef = useRef();
   const shuffleRef = useRef();
@@ -45,14 +46,21 @@ const [shuffledSongs, setShuffledSongs] = useState([])
 setisplaying(false)
     if (index == 0) {
       if(shuffle) {
-      setCurrentSong(shuffledSongs[shuffledSongs.length - 1]);
-      } else 
-        setCurrentSong(songs[songs.length - 1]);
+        const pointer = shuffledSongs.length - 1
+        updateIndex(pointer)
+      setCurrentSong(shuffledSongs[pointer]);
+      } else {
+        const pointer = songs.length - 1;
+        updateIndex(pointer)
+        setCurrentSong(songs[pointer]);
+      }
     } else {
+      const pointer = index - 1;
+      updateIndex(pointer)
       if(shuffle) {
-        setCurrentSong(shuffledSongs[index - 1]);
+        setCurrentSong(shuffledSongs[pointer]);
         } else
-          setCurrentSong(songs[index - 1]);
+          setCurrentSong(songs[pointer]);
     }
     audioElem.current.currentTime = 0;
     setTimeout(() => {
@@ -69,9 +77,12 @@ setShuffledSongs((e) => [
   currentSong
 ])
     if (index == songs.length - 1 && !shuffle) {
+      updateIndex(0)
       setCurrentSong(songs[0]);
     } else {
-      setCurrentSong(songs[index + 1]);
+      const pointer = index + 1;
+      updateIndex(pointer)
+      setCurrentSong(songs[pointer]);
     }
     audioElem.current.currentTime = 0;
 setTimeout(() => {

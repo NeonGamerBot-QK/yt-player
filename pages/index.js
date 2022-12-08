@@ -8,19 +8,41 @@ import Footer from "../components/Footer";
 import { useEffect, useRef, useState } from "react";
 // import Player from "@madzadev/audio-player";
 export default function Home() {
-const burl = process.browser ? new URL(window.location.href) : null;
+useEffect(() => {
+const url = process.browser ? new URLSearchParams( window.location) : null;
+if(url) {
+  const playlist_url = url.get("p");
+  const song_index = url.get("s");
+  const autoload = url.get("a");
+if(songs.length === 0) {
+updateUrl(playlist_url);
+setSongIndex(songIndex)
+if(autoload) onLoadPlaylist();
+}
+}
+})
   const [songs, setSongs] = useState([]);
   const [info, setInfo] = useState({});
   const [isplaying, setisplaying] = useState(false);
   const [isshuffleon, setShuffle] = useState(false);
   const [isrepeating, setisrp] = useState(0);
-  const [url, updateUrl] = useState(burl.searchParams.get("p") || "");
-  const [currentSong, setCurrentSong] = useState(songs[0]);
+  const [songIndex, setSongIndex] = useState(0);
+  const [url, updateUrl] = useState("");
+  const [currentSong, setCurrentSong] = useState(songs[songIndex]);
   const audioElem = useRef();
-
+const updateSongIndex = (index) => {
+  if(window.location) {
+    const url = process.browser ? new URLSearchParams( window.location) : null;
+if(url) {
+  url.set("s", index);
+  setSongIndex(index);
+}
+  }
+}
   useEffect(() => {
     if(songs[0] && !currentSong) {
-      setCurrentSong(songs[0])
+      
+      setCurrentSong(songs[songIndex])
     }
     if(!audioElem.current) return;
     audioElem.current.addEventListener('loadstart', () => {
@@ -29,6 +51,7 @@ const burl = process.browser ? new URL(window.location.href) : null;
     console.log("loaded start , duration: " + duration)
 
   })
+  
     audioElem.current.addEventListener('loadedmetadata', () => {
       let duration = audioElem.current.duration;
       // The duration variable now holds the duration (in seconds) of the audio clip
@@ -76,7 +99,7 @@ document.title = currentSong.title;
 
   }
 
-if(url !== "" && songs.length === 0) onLoadPlaylist();
+//if(url !== "" && songs.length === 0) onLoadPlaylist();
   // useEffect(())
   return (
     <div className={styles.container}>
@@ -90,7 +113,7 @@ if(url !== "" && songs.length === 0) onLoadPlaylist();
       {songs.length !== 0 ?    <div className="App">
       <audio src={currentSong ?  currentSong.url : songs[0].url} ref={audioElem} onTimeUpdate={onPlaying} loop={isrepeating === 1}/>
      
-      <Player songs={songs} setSongs={setSongs} isplaying={isplaying} setisplaying={setisplaying} audioElem={audioElem} currentSong={currentSong} setCurrentSong={setCurrentSong} isrepeating={isrepeating} setRepeat={setisrp} />
+      <Player updateIndex={updateSongIndex} songs={songs} setSongs={setSongs} isplaying={isplaying} setisplaying={setisplaying} audioElem={audioElem} currentSong={currentSong} setCurrentSong={setCurrentSong} isrepeating={isrepeating} setRepeat={setisrp} />
     </div>:  <Wrapper>
 <h1>Playlist url</h1>
       <input name="playlist_url" type="url" value={url} onChange={(e) => updateUrl(e.target.value)} />
