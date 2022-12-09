@@ -97,7 +97,7 @@ console.debug(currentSong, "Debug")
       if (songs.length === 0 ) {
       console.debug("QUERY LOADED", url.values(), playlist_id, song_index, autoload, window.location)
        if(playlist_id) updateUrl("https://www.youtube.com/playlist?list="+playlist_id);
-        setSongIndex(song_index)
+        setSongIndex(song_index || 0)
         setisplaying(songIndex > 0 ? true :false)
         console.debug("SET VALUES", songIndex, url)
         if (autoload) onLoadPlaylist();
