@@ -24,6 +24,8 @@ export default function Home() {
       if (url) {
         url.set("s", index);
         setSongIndex(index);
+        url.set("p", url)
+        url.set("a", 1)
         window.location.search = url.toString()
       }
     }
