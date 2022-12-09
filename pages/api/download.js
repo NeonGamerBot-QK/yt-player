@@ -30,7 +30,7 @@ console.log(`running for: ${downloadedMinutes.toFixed(2)}minutes, estimated time
   })
  stream.on("end", () => {
    console.log("STREAM END")
-res.end(Buffer.contact(streamData));
+res.end(Buffer.concat(streamData));
 })
 stream.on("data", (chunk) => {
    console.log("DATA", chunk)
