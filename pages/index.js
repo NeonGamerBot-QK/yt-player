@@ -63,7 +63,7 @@ export default function Home() {
   }, [currentSong, isplaying, songs, songIndex])
   const onLoadPlaylist = async () => {
     const playlist_d = await fetch("/api/search?url=" + url).then(r => r.json())
-    console.log(playlist_d)
+    console.log(playlist_d, songIndex, "onPLaylistLoad")
     setInfo(playlist_d)
     setSongs(playlist_d.videos.map((v) => {
       return {
@@ -94,7 +94,7 @@ console.debug(currentSong, "Debug")
       const playlist_id = url.get("p");
       const song_index = url.get("s");
       const autoload = url.get("a");
-      if (songs.length === 0) {
+      if (songs.length === 0 ) {
       console.debug("QUERY LOADED", url.values(), playlist_id, song_index, autoload, window.location)
        if(playlist_id) updateUrl("https://www.youtube.com/playlist?list="+playlist_id);
         setSongIndex(song_index)
