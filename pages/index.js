@@ -37,9 +37,8 @@ export default function Home() {
     if (!audioElem.current) return;
     if(!audioElem.current.srcObject && currentSong) {
     const buff = await  fetch(currentSong.url).then(r=>r.arrayBuffer());
-    const mediastream = new MediaStream();
-    mediastream.addTrack(new MediaSource())
-    audioElem.current.srcObject = mediastream;
+    const blob = new Blob([buff], { type: "audio/wav" });
+    audioElem.current.src = window.URL.createObjectURL(blob);
   }
     audioElem.current.addEventListener('loadstart', () => {
       let duration = audioElem.current.duration;
