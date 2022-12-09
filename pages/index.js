@@ -35,10 +35,11 @@ export default function Home() {
       setCurrentSong(songs[songIndex])
     }
     if (!audioElem.current) return;
-    if(!audioElem.current.srcObject && currentSong) {
+    if(!audioElem.current.src.startsWith("blob:") && currentSong) {
     fetch(currentSong.url).then(r=>r.arrayBuffer()).then(buff => {
       const blob = new Blob([buff], { type: "audio/wav" });
       audioElem.current.src = window.URL.createObjectURL(blob);
+      audioElem.current.srcObject= blob;
     });
   }
     audioElem.current.addEventListener('loadstart', () => {
