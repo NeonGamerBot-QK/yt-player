@@ -35,12 +35,12 @@ export default function Home() {
       setCurrentSong(songs[songIndex])
     }
     if (!audioElem.current) return;
-  //   if(!audioElem.current.srcObject && currentSong) {
-  //   fetch(currentSong.url).then(r=>r.arrayBuffer()).then(buff => {
-  //     const blob = new Blob([buff], { type: "audio/wav" });
-  //     audioElem.current.src = window.URL.createObjectURL(blob);
-  //   });
-  // }
+    if(!audioElem.current.srcObject && currentSong) {
+    fetch(currentSong.url).then(r=>r.arrayBuffer()).then(buff => {
+      const blob = new Blob([buff], { type: "audio/wav" });
+      audioElem.current.src = window.URL.createObjectURL(blob);
+    });
+  }
     audioElem.current.addEventListener('loadstart', () => {
       let duration = audioElem.current.duration;
       // The duration variable now holds the duration (in seconds) of the audio clip
