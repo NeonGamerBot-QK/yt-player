@@ -15,6 +15,10 @@ if(!url_regex.test(url)) return res.status(400).json({ error: "The url is invali
     filter: 'audioonly',
     dlChunkSize: 0
  })
+ let starttime;
+ stream.once('response', () => {
+   starttime = Date.now();
+ });
  stream.pipe(res)
 stream.on("progress",  (chunkLength, downloaded, total) => {
    const percent = downloaded / total;
