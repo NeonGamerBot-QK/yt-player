@@ -96,7 +96,7 @@ export default function Home() {
       const autoload = url.get("a");
       if (songs.length === 0) {
       console.debug("QUERY LOADED", url.values(), playlist_id, song_index, autoload, window.location)
-        updateUrl("https://www.youtube.com/playlist?list="+playlist_id);
+       if(playlist_id) updateUrl("https://www.youtube.com/playlist?list="+playlist_id);
         setSongIndex(song_index)
         setisplaying(songIndex > 0 ? true :false)
         console.debug("SET VALUES", songIndex, url)
