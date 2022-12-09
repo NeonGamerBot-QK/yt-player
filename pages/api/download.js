@@ -23,10 +23,10 @@ if(!url_regex.test(url)) return res.status(400).json({ error: "The url is invali
  //stream.pipe(res)
 stream.on("progress",  (chunkLength, downloaded, total) => {
    const percent = downloaded / total;
-   const downloadedMinutes = (Date.now() - starttime) / 1000 / 60;
-   const estimatedDownloadTime = (downloadedMinutes / percent) - downloadedMinutes;
+   const downloadedSeconds = (Date.now() - starttime) / 1000;
+   const estimatedDownloadTime = (downloadedSeconds / percent) - downloadedSeconds;
 (`${(percent * 100).toFixed(2)}% downloaded (${(downloaded / 1024 / 1024).toFixed(2)}MB of ${(total / 1024 / 1024).toFixed(2)}MB)`);
-console.log(`running for: ${downloadedMinutes.toFixed(2)}minutes, estimated time left: ${estimatedDownloadTime.toFixed(2)}minutes `)
+console.log(`running for: ${downloadedSeconds.toFixed(2)} seconds, estimated time left: ${estimatedDownloadTime.toFixed(2)}minutes `)
   })
  stream.on("end", () => {
    console.log("STREAM END")
