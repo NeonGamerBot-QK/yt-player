@@ -24,17 +24,23 @@ export default function Home() {
       if (uurl) {
         uurl.set("s", index);
         setSongIndex(index);
-        uurl.set("p", new URLSearchParams(url).get("list"))
+        uurl.set("p", new URL(url).searchParams.get("list"))
         uurl.set("a", 1)
-        window.location.search = url.toString()
+        window.location.search = uurl.toString()
       }
     }
   }
-  useEffect(() => {
+  useEffect(async () => {
     if (songs[0] && !currentSong) {
       setCurrentSong(songs[songIndex])
     }
     if (!audioElem.current) return;
+    if(!audioElem.current.srcObject && currentSong) {
+    const buff = await  fetch(currentSong.url).then(r=>r.arrayBuffer());
+    const mediastream = new MediaStream();
+    mediastream.addTrack(new MediaSource())
+    audioElem.current.srcObject = mediastream;
+  }
     audioElem.current.addEventListener('loadstart', () => {
       let duration = audioElem.current.duration;
       // The duration variable now holds the duration (in seconds) of the audio clip
