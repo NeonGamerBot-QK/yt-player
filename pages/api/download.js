@@ -33,7 +33,7 @@ console.log(`running for: ${downloadedMinutes.toFixed(2)}minutes, estimated time
 res.end(Buffer.concat(streamData));
 })
 stream.on("data", (chunk) => {
-   console.log("DATA", chunk)
+  // console.log("DATA", chunk)
 streamData.push(chunk)
 }) 
 //  const fdata = new FormData()
