@@ -110,7 +110,7 @@ const repeatClick = () => {
 }
   return (
     <div className="player_container">
-      { currentSong && currentSong.thumbnail ? <Image alt="Cover of song" loader={myLoader} src={currentSong.thumbnail} width={200} height={200}/> : null}
+      { currentSong && currentSong.thumbnail ? <Image alt="Cover of song" loader={myLoader} src={currentSong.thumbnail} width={480} height={360}/> : null}
       <div className="title">
         <p>{currentSong.title} - {audioElem.current ? formatTime(audioElem.current.currentTime) : null}/{audioElem.current ? formatTime(audioElem.current.duration) : null}</p>
       </div>
