@@ -12,7 +12,7 @@ console.debug("URL DOWNLOAD ", url, url_regex.test(url))
  if(!url) return res.status(400).json({ error: "No URL supplied, supply one by using the ?url= parameter" });
 if(!url_regex.test(url)) return res.status(400).json({ error: "The url is invalid!, this is not a valid youtube video link"})
  const stream = ytdl(url, {
-    quality: "highestaudio",
+    quality: "lowestaudio",
     filter: 'audioonly',
     dlChunkSize: 0
  })
@@ -30,7 +30,7 @@ console.log(`running for: ${downloadedSeconds.toFixed(2)} seconds, estimated tim
   })
  stream.on("end", () => {
    console.log("STREAM END")
-res.end(Buffer.concat(streamData));
+res.end(206, Buffer.concat(streamData));
 })
 stream.on("data", (chunk) => {
   // console.log("DATA", chunk)
