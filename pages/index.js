@@ -87,7 +87,7 @@ export default function Home() {
 
   }
   useEffect(() => {
-
+console.debug(currentSong, "Debug")
     const url = process.browser ? new URLSearchParams(window.location.search) : null;
     //console.debug("URL STATE", url)
     if (url) {
