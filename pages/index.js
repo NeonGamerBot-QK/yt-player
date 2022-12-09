@@ -20,12 +20,12 @@ export default function Home() {
 
   const updateSongIndex = (index) => {
     if (window.location) {
-      const url = process.browser ? new URLSearchParams(window.location.search) : null;
-      if (url) {
-        url.set("s", index);
+      const uurl = process.browser ? new URLSearchParams(window.location.search) : null;
+      if (uurl) {
+        uurl.set("s", index);
         setSongIndex(index);
-        url.set("p", url)
-        url.set("a", 1)
+        uurl.set("p", new URLSearchParams(url).get("list"))
+        uurl.set("a", 1)
         window.location.search = url.toString()
       }
     }

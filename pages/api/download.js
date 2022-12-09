@@ -16,14 +16,20 @@ if(!url_regex.test(url)) return res.status(400).json({ error: "The url is invali
     dlChunkSize: 0
  })
  stream.pipe(res)
-
+stream.on("progress",  (chunkLength, downloaded, total) => {
+   const percent = downloaded / total;
+   const downloadedMinutes = (Date.now() - starttime) / 1000 / 60;
+   const estimatedDownloadTime = (downloadedMinutes / percent) - downloadedMinutes;
+(`${(percent * 100).toFixed(2)}% downloaded (${(downloaded / 1024 / 1024).toFixed(2)}MB of ${(total / 1024 / 1024).toFixed(2)}MB)`);
+console.log(`running for: ${downloadedMinutes.toFixed(2)}minutes, estimated time left: ${estimatedDownloadTime.toFixed(2)}minutes `)
+  })
  stream.on("end", () => {
    console.log("STREAM END")
-
+res.end();
 })
-stream.on("data", (chunk) => {
-   console.log("DATA", chunk)
-}) 
+// stream.on("data", (chunk) => {
+//    console.log("DATA", chunk)
+// }) 
 //  const fdata = new FormData()
 //   fdata.append("file", stream)
 //  fetch("http://n1.saahild.com:2014/upload", {
