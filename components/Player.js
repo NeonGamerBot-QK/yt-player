@@ -8,11 +8,15 @@ import {
   BsFillSkipEndCircleFill,
   BsShuffle,
 } from "react-icons/bs";
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+
 import {
   TbRepeat,
   TbRepeatOnce,
   TbRepeatOff
 } from "react-icons/tb"
+const animatedComponents = makeAnimated();
 const Player = ({
   audioElem,
   isplaying,
@@ -24,15 +28,24 @@ const Player = ({
   setRepeat,
   shuffle,
   setShuffle,
-  updateIndex
+  updateIndex,
+  songIndex
 }) => {
+  const myLoader = ({ src, width, quality }) => {
+    return src;
+  }
   const clickRef = useRef();
   const shuffleRef = useRef();
 const [shuffledSongs, setShuffledSongs] = useState([])
   const PlayPause = () => {
     setisplaying(!isplaying);
   };
-
+const options = songs.map((song, index) => {
+  return {
+    value: index,
+    label: <div className="title"><Image alt="Cover of song" style={{ height: "20%", width: "20%", borderRadius: "10px" }} loader={myLoader} src={song.thumbnail} width={480} height={360} /><br />{song.title}</div>
+  }
+})
   const checkWidth = (e) => {
     let width = clickRef.current.clientWidth;
     const offset = e.nativeEvent.offsetX;
@@ -95,9 +108,7 @@ if(audioElem.current) {
     skiptoNext();
   }
 }
-const myLoader = ({ src, width, quality }) => {
-  return src;
-}
+
 function formatTime(sec) {
   const mins = (sec / 60).toString().split(".")[0]
 const seconds = (sec.toFixed(0) % 60)
@@ -110,6 +121,15 @@ const repeatClick = () => {
 }
   return (
     <div className="player_container">
+       <Select
+      components={animatedComponents}
+      defaultValue={[options[songIndex]]}
+      options={options}
+      className="dark"
+      onChange={(value, am) => {
+        updateIndex(value.value) 
+      }}
+    />
       { currentSong && currentSong.thumbnail ? <Image alt="Cover of song" loader={myLoader} src={currentSong.thumbnail} width={480} height={360}/> : null}
       <div className="title">
         <p>{currentSong.title} - {audioElem.current ? formatTime(audioElem.current.currentTime) : null}/{audioElem.current ? formatTime(audioElem.current.duration) : null}</p>
@@ -141,6 +161,7 @@ const repeatClick = () => {
         <BsFillSkipEndCircleFill className="btn_action" onClick={skiptoNext} />
        { isrepeating === 0 ? <TbRepeat className="btn_action" onClick={repeatClick} /> : isrepeating === 1 ? <TbRepeatOnce className="btn_action" onClick={repeatClick} />: isrepeating === 2 ? <TbRepeatOff   className="btn_action" onClick={repeatClick}/> : isrepeating} 
       </div>
+     
     </div>
   );
 };

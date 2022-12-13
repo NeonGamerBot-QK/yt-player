@@ -5,6 +5,8 @@ import styles from "../styles/Home.module.css"
 import Wrapper from "../components/Wrapper";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+
+
 import { useEffect, useRef, useState } from "react";
 // import Player from "@madzadev/audio-player";
 export default function Home() {
@@ -72,6 +74,7 @@ export default function Home() {
   }, [currentSong, isplaying, songs, songIndex])
   const onLoadPlaylist = async () => {
     const playlist_d = await fetch("/api/search?url=" + url).then(r => r.json())
+    if(!playlist_d.videos) return;
     console.log(playlist_d, songIndex, "onPLaylistLoad")
     setInfo(playlist_d)
     setSongs(playlist_d.videos.map((v) => {
@@ -133,7 +136,7 @@ console.debug(currentSong, "Debug")
         {songs.length !== 0 ? <div className="App">
           <audio src={currentSong ? currentSong.url : songs[songIndex].url} autoPlay muted ref={audioElem} onTimeUpdate={onPlaying} loop={isrepeating === 1} />
 
-          <Player updateIndex={updateSongIndex} songs={songs} setSongs={setSongs} isplaying={isplaying} setisplaying={setisplaying} audioElem={audioElem} currentSong={currentSong} setCurrentSong={setCurrentSong} isrepeating={isrepeating} setRepeat={setisrp} />
+          <Player songIndex={songIndex} updateIndex={updateSongIndex} songs={songs} setSongs={setSongs} isplaying={isplaying} setisplaying={setisplaying} audioElem={audioElem} currentSong={currentSong} setCurrentSong={setCurrentSong} isrepeating={isrepeating} setRepeat={setisrp} />
         </div> : <Wrapper>
           <h1>Playlist url</h1>
           <input name="playlist_url" type="url" value={url} onChange={(e) => updateUrl(e.target.value)} />
