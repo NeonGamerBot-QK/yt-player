@@ -7,4 +7,4 @@ const nextConfig = {
   swcMinify: true,
 }
 // console.log(extra_config, new String(extra_config.webpack).toString())
-module.exports = nextConfig;
+module.exports = {};
