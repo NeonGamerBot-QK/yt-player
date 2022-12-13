@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@madzadev/audio-player": "^1.1.11",
     "formdata-node": "^5.0.0",
     "next": "13.0.5",
     "next-images": "^1.8.4",
