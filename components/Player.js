@@ -125,7 +125,8 @@ const repeatClick = () => {
       components={animatedComponents}
       defaultValue={[options[songIndex]]}
       options={options}
-      className="dark"
+      className="my-react-select-container"
+   classNamePrefix="my-react-select"
       onChange={(value, am) => {
         updateIndex(value.value) 
       }}
@@ -143,8 +144,8 @@ const repeatClick = () => {
         </div>
       </div>
       <div className="controls">
-    <BsShuffle className="btn_action" onClick={() => {
-      setShuffle(true)
+    <BsShuffle className={`btn_action ${shuffle ? "shuffle-on" : ""}`} onClick={() => {
+      setShuffle(!shuffle)
     }}/>
 {/*   <img src="/shuffle.png" className="btn_action" width={64 * 2} height={64 * 2}ref={shuffleRef} onClick={() => {
           shuffleRef.current.src = "/shuffle.gif";

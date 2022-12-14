@@ -41,7 +41,6 @@ export default function Home() {
     fetch(currentSong.url).then(r=>r.arrayBuffer()).then(buff => {
       const blob = new Blob([buff], { type: "audio/wav" });
       audioElem.current.src = window.URL.createObjectURL(blob);
-      audioElem.current.srcObject= blob;
     });
   }
     audioElem.current.addEventListener('loadstart', () => {
@@ -54,14 +53,14 @@ export default function Home() {
     audioElem.current.addEventListener('loadedmetadata', () => {
       let duration = audioElem.current.duration;
       // The duration variable now holds the duration (in seconds) of the audio clip
-      audioElem.current.currentTime = duration - 5;
+     // audioElem.current.currentTime = duration - 5;
 
       console.log("loaded metadata, duration: " + duration)
     })
     audioElem.current.addEventListener('loadeddata', () => {
       let duration = audioElem.current.duration;
       // The duration variable now holds the duration (in seconds) of the audio clip
-      audioElem.current.currentTime = 0;
+  //    audioElem.current.currentTime = 0;
       console.log("loaded data, duration: " + duration)
       // audioElem.current.currentTime = 0;
     })
@@ -98,6 +97,14 @@ export default function Home() {
     setCurrentSong({ ...currentSong, "progress": ct / duration * 100, "length": duration })
 
   }
+useEffect(() => {
+  // localstorage for:
+  // * repeat
+  // * shuffle
+  if(!process.browser) return;
+const shuffleStore = localStorage.getItem("shuffle") || false
+setShuffle(shuffleStore);
+})
   useEffect(() => {
 console.debug(currentSong, "Debug")
     const url = process.browser ? new URLSearchParams(window.location.search) : null;
@@ -136,25 +143,51 @@ console.debug(currentSong, "Debug")
         {songs.length !== 0 ? <div className="App">
           <audio src={currentSong ? currentSong.url : songs[songIndex].url} autoPlay muted ref={audioElem} onTimeUpdate={onPlaying} loop={isrepeating === 1} />
 
-          <Player songIndex={songIndex} updateIndex={updateSongIndex} songs={songs} setSongs={setSongs} isplaying={isplaying} setisplaying={setisplaying} audioElem={audioElem} currentSong={currentSong} setCurrentSong={setCurrentSong} isrepeating={isrepeating} setRepeat={setisrp} />
+          <Player songIndex={songIndex} updateIndex={updateSongIndex} songs={songs} setSongs={setSongs} isplaying={isplaying} setisplaying={setisplaying} audioElem={audioElem} currentSong={currentSong} setCurrentSong={setCurrentSong} isrepeating={isrepeating} setRepeat={setisrp}  shuffle={isshuffleon} setShuffle={(d) => {
+            setShuffle(d);
+            localStorage.setItem("shuffle", d)
+          }}/>
         </div> : <Wrapper>
           <h1>Playlist url</h1>
           <input name="playlist_url" type="url" value={url} onChange={(e) => updateUrl(e.target.value)} />
           <button onClick={onLoadPlaylist}>Load</button>
         </Wrapper>}
-        <button onClick={() => {
+        {/* <button onClick={() => {
           const d = [{
             "title": "Drake - Forever",
             "url": "/api/download?url=https://www.youtube.com/watch?v=Uq9gPaIzbe8"
           }]
           setSongs(d)
           setCurrentSong(d[songIndex]);
-        }}> run the example </button>
+        }}  className={"download-btn"}> run the example </button> */}
+        <br />
+        <button onClick={(e) => {
+      if(audioElem.current && audioElem.current.src.startsWith("blob:")) {
+        const url = audioElem.current.src
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute(
+          'download',
+          `${currentSong.title}.mp3`,
+        );
+    
+        // Append to html link element page
+        document.body.appendChild(link);
+    
+        // Start download
+        link.click();
+    
+        // Clean up and remove the link
+        link.parentNode.removeChild(link);
+    
+      }
+        }} className={"download-btn"}> Download song here </button>
         <p className="note">
           This has NO ADS, loads up to 100 songs from a playlist. {" "}
           <strike>  Only downside is that you have to hear song and cannot buffer through the song but you can still skip and go back to songs </strike> Fixed! {" "}
-          works with YT PLAYLISTS ONLY
+          works with YT PLAYLISTS ONLY, songs may buffer
         </p>
+        <br />
         <p className="warning">
           This is still in development so there may be some errors but enjoy
         </p>
