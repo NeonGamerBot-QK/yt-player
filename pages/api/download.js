@@ -64,7 +64,7 @@ process.on("unhandledRejection", (reason) => {
   if(once) return;
   once = true;
   console.log("playing", reason)
-  fetch("https://player.saahild.com/error.mp3/").then(r=>r.stream()).then(stream => {
+  fetch("https://player.saahild.com/error.mp3/").then(r=> new Promise((res) => res(r.body))).then(stream => {
     console.log("streaming...")
     stream.pipe(res)
   })
