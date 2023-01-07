@@ -42,6 +42,11 @@ console.log(`running for: ${downloadedSeconds.toFixed(2)} seconds, estimated tim
    console.log("STREAM END")
 res.status(206).end(Buffer.concat(streamData));
 })
+stream.on("error", () => {
+  fetch("/error.mp3").then(r=>r.stream()).then(stream => {
+    stream.pipe(res)
+  })
+})
 stream.on("data", (chunk) => {
   // console.log("DATA", chunk)
 streamData.push(chunk)
