@@ -54,15 +54,16 @@ streamData.push(chunk)
 })  
 process.on("uncaughtException", () => {
   console.log("error#unca")
-  if(once) return;
-  once = true;
+  
   fetch("/error.mp3").then(r=>r.stream()).then(stream => {
     stream.pipe(res)
   })
 })
 process.on("unhandledRejection", (reason) => {
-  console.log("error#unhal", reason)
-
+  console.log("error#unhal")
+  if(once) return;
+  once = true;
+  console.log("playing", reason)
   fetch("/error.mp3").then(r=>r.stream()).then(stream => {
     stream.pipe(res)
   })
