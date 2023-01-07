@@ -12,10 +12,19 @@ console.debug("URL DOWNLOAD ", url, url_regex.test(url))
  if(!url) return res.status(400).json({ error: "No URL supplied, supply one by using the ?url= parameter" });
 if(!url_regex.test(url)) return res.status(400).json({ error: "The url is invalid!, this is not a valid youtube video link"})
  try {
-  const stream = ytdl(url, {
+  const stream = await ytdl(url, {
     quality: "lowestaudio",
     filter: 'audioonly',
-    dlChunkSize: 0
+    dlChunkSize: 0,
+    requestOptions: {
+      headers: {
+        cookie: process.env.COOKIE,
+        // Optional. If not given, ytdl-core will try to find it.
+        // You can find this by going to a video's watch page, viewing the source,
+        // and searching for "ID_TOKEN".
+        // 'x-youtube-identity-token': 1324,
+      },
+    },
  })
  let starttime;
  stream.once('response', () => {
