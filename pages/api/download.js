@@ -22,7 +22,7 @@ if(!url_regex.test(url)) return res.status(400).json({ error: "The url is invali
         // Optional. If not given, ytdl-core will try to find it.
         // You can find this by going to a video's watch page, viewing the source,
         // and searching for "ID_TOKEN".
-        // 'x-youtube-identity-token': 1324,
+        'x-youtube-identity-token': process.env.ID_TOKEN,
       },
     },
  })
