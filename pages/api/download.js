@@ -5,6 +5,7 @@ import fetch from "node-fetch";
 import {FormData} from "formdata-node"
 const url_regex = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/
 export default async function handler(req, res) {
+  let once = false;
 const url = req.query.url
 const streamData = []
 console.debug("URL DOWNLOAD ", url, url_regex.test(url))
@@ -53,12 +54,14 @@ streamData.push(chunk)
 })  
 process.on("uncaughtException", () => {
   console.log("error#unca")
+  if(once) return;
+  once = true;
   fetch("/error.mp3").then(r=>r.stream()).then(stream => {
     stream.pipe(res)
   })
 })
-process.on("unhandledRejection", () => {
-  console.log("error#unhal")
+process.on("unhandledRejection", (reason) => {
+  console.log("error#unhal", reason)
 
   fetch("/error.mp3").then(r=>r.stream()).then(stream => {
     stream.pipe(res)
