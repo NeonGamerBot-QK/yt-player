@@ -55,7 +55,7 @@ streamData.push(chunk)
 process.on("uncaughtException", () => {
   console.log("error#unca")
   
-  fetch(req.headers.get("host")+"/error.mp3").then(r=>r.stream()).then(stream => {
+  fetch("https://player.saahild.com/error.mp3").then(r=>r.stream()).then(stream => {
     stream.pipe(res)
   })
 })
