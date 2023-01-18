@@ -17,7 +17,7 @@ if(!url_regex.test(url)) return res.status(400).json({ error: "The url is invali
     quality: "lowestaudio",
     filter: 'audioonly',
     dlChunkSize: 0,
-    requestOptions: {
+    requestOptions:  process.env.COOKIE && process.env.ID_TOKEN ? {
       headers: {
         cookie: process.env.COOKIE,
         // Optional. If not given, ytdl-core will try to find it.
@@ -25,7 +25,7 @@ if(!url_regex.test(url)) return res.status(400).json({ error: "The url is invali
         // and searching for "ID_TOKEN".
         'x-youtube-identity-token': process.env.ID_TOKEN,
       },
-    },
+    } : null,
  })
  let starttime;
  stream.once('response', () => {
