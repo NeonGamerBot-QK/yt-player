@@ -12,7 +12,7 @@ console.debug("URL DOWNLOAD ", url, url_regex.test(url))
     if(req.method !== "GET") return res.status(405).json({ error: "Invalid method, only 'GET' is allowed" })
  if(!url) return res.status(400).json({ error: "No URL supplied, supply one by using the ?url= parameter" });
 if(!url_regex.test(url)) return res.status(400).json({ error: "The url is invalid!, this is not a valid youtube video link"})
- setTimeout(() => {
+ setTimeout(async () => {
   try {
   const stream = await ytdl(url, {
     quality: "lowestaudio",
