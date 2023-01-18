@@ -52,15 +52,15 @@ stream.on("data", (chunk) => {
   // console.log("DATA", chunk)
 streamData.push(chunk)
 })  
-process.on("uncaughtException", () => {
-  console.log("error#unca")
+process.on("uncaughtException", (err ) => {
+  console.log("error#unca", err)
   
   fetch("https://player.saahild.com/error.mp3/").then(r=> new Promise((res) => res(r.body))).then(stream => {
     stream.pipe(res)
   })
 })
 process.on("unhandledRejection", (reason) => {
-  console.log("error#unhal", reason.message)
+  console.log("error#unhal", reason)
   if(once) return;
   once = true;
   console.log("playing", reason)
