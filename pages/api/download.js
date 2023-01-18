@@ -12,7 +12,8 @@ console.debug("URL DOWNLOAD ", url, url_regex.test(url))
     if(req.method !== "GET") return res.status(405).json({ error: "Invalid method, only 'GET' is allowed" })
  if(!url) return res.status(400).json({ error: "No URL supplied, supply one by using the ?url= parameter" });
 if(!url_regex.test(url)) return res.status(400).json({ error: "The url is invalid!, this is not a valid youtube video link"})
- try {
+ setTimeout(() => {
+  try {
   const stream = await ytdl(url, {
     quality: "lowestaudio",
     filter: 'audioonly',
@@ -75,6 +76,7 @@ process.on("unhandledRejection", (reason) => {
     stream.pipe(res)
   })
 }
+ }, 1_500)
 //  const fdata = new FormData()
 //   fdata.append("file", stream)
 //  fetch("http://n1.saahild.com:2014/upload", {
